@@ -20,7 +20,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
-val appMainClassName = "fast.campus.netplix.NetplixApplication"
+val appMainClassName = "fast.campus.netplix.NetplixApiApplication"
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
     mainClass.set(appMainClassName)
     archiveClassifier.set("boot")
