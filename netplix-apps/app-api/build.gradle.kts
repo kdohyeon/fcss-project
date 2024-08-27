@@ -7,8 +7,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator") // metric
     implementation("org.flywaydb:flyway-core")
 
-//    runtimeOnly(project(":netplix-adapters:adapter-http")) // to get adapter-http-property.yml
-//    runtimeOnly(project(":netplix-adapters:adapter-persistence")) // to get adapter-persistence-property.yml
+    runtimeOnly(project(":netplix-adapters:adapter-http")) // to get adapter-http-property.yml
+    runtimeOnly(project(":netplix-adapters:adapter-persistence")) // to get adapter-persistence-property.yml
 
     integrationImplementation("org.springframework.boot:spring-boot-starter-test")
     integrationImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")

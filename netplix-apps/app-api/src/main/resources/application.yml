@@ -1,0 +1,19 @@
+spring:
+  config:
+    import:
+      - 'classpath:adapter-http-property.yml'
+      - 'classpath:adapter-persistence-property.yml'
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
