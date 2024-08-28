@@ -5,6 +5,7 @@ dependencies {
     implementation("org.springframework:spring-tx")
 
     implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-mysql")
 
     implementation("com.querydsl:querydsl-jpa")
     implementation("com.querydsl:querydsl-core")

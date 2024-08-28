@@ -4,6 +4,16 @@
 - Java 17
 - Kotlin 2.0.20
 
+### 로컬 환경 설정
+
+- docker-compose 파일 실행
+
+```shell
+docker-compose -f ./infra/docker-compose-mysql.yml up -d
+
+docker ps -a
+```
+
 ### 프로젝트 셋팅
 
 - 멀티 모듈 프로젝트로 셋팅
