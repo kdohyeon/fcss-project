@@ -97,7 +97,6 @@ configureByLabels("java") {
         implementation("org.apache.commons:commons-lang3")
         implementation("org.apache.commons:commons-collections4")
         implementation("org.mapstruct:mapstruct")
-        implementation("org.springframework.boot:spring-boot-starter-aop")
 
         annotationProcessor("org.mapstruct:mapstruct-processor")
 
