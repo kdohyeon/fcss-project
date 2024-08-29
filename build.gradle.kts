@@ -56,7 +56,6 @@ configureByLabels("java") {
             mavenBom("org.springframework.boot:spring-boot-dependencies:${Versions.springBoot}")
             mavenBom("org.jetbrains.kotlin:kotlin-bom:${Versions.kotlin}")
             mavenBom("com.google.guava:guava-bom:${Versions.guava}")
-            mavenBom("com.querydsl:querydsl-bom:${Versions.querydsl}")
         }
 
         dependencies {
@@ -66,9 +65,6 @@ configureByLabels("java") {
             dependency("org.mapstruct:mapstruct:${Versions.mapstruct}")
             dependency("org.mapstruct:mapstruct-processor:${Versions.mapstruct}")
             dependency("com.fasterxml.jackson.core:jackson-databind:${Versions.jacksonCore}")
-            dependency("com.querydsl:querydsl-core:${Versions.querydsl}")
-            dependency("com.querydsl:querydsl-jpa:${Versions.querydsl}")
-            dependency("com.querydsl:querydsl-apt:${Versions.querydsl}")
 
             dependency("org.junit.jupiter:junit-jupiter-api:${Versions.junit}")
             dependency("org.junit.jupiter:junit-jupiter-params:${Versions.junit}")
@@ -152,4 +148,30 @@ configureByLabels("asciidoctor") {
 
 configureByLabels("restdocs") {
     apply(plugin = "com.epages.restdocs-api-spec")
+}
+
+configureByLabels("querydsl") {
+    the<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension>().apply {
+        imports {
+            mavenBom("com.querydsl:querydsl-bom:${Versions.querydsl}")
+        }
+
+        dependencies {
+            dependency("com.querydsl:querydsl-core:${Versions.querydsl}")
+            dependency("com.querydsl:querydsl-jpa:${Versions.querydsl}")
+            dependency("com.querydsl:querydsl-apt:${Versions.querydsl}")
+        }
+    }
+
+    dependencies {
+        val implementation by configurations
+        val annotationProcessor by configurations
+
+        implementation("com.querydsl:querydsl-jpa:${Versions.querydsl}:jakarta")
+        implementation("com.querydsl:querydsl-core:${Versions.querydsl}")
+
+        annotationProcessor("com.querydsl:querydsl-apt:${Versions.querydsl}:jakarta")
+        annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+        annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+    }
 }
