@@ -23,3 +23,5 @@ include("netplix-core:core-port")
 include("netplix-core:core-service")
 include("netplix-core:core-usecase")
 
+include("netplix-commons")
+
