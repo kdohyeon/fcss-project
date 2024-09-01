@@ -1,0 +1,12 @@
+### 로그인
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "danny.kim@kakaobank.com",
+  "password": "12345"
+}
+
+### test
+GET http://localhost:8080/api/v1/sample/test
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW5ueS5raW0iLCJhdXRoIjoiIiwiZXhwIjoxNzI1Mjg0MzA1fQ.jvDxBj4gX6lq2BhrCTdSo3uxfbWjdc8CDre3Z3rwjd4

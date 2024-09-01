@@ -7,9 +7,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-validation") // valid
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf") // valid
-    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
-    implementation("org.springframework.data:spring-data-commons") // Pageable
     implementation("org.springframework.boot:spring-boot-starter-actuator") // metric
+    implementation("org.springframework.data:spring-data-commons") // Pageable
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+
+    implementation("io.jsonwebtoken:jjwt-api:${Versions.jwt}")
+    implementation("io.jsonwebtoken:jjwt-impl:${Versions.jwt}")
+    implementation("io.jsonwebtoken:jjwt-jackson:${Versions.jwt}")
+
     implementation("org.flywaydb:flyway-core")
 
     runtimeOnly(project(":netplix-adapters:adapter-http")) // to get adapter-http-property.yml

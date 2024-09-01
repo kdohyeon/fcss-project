@@ -9,6 +9,8 @@ object Versions {
 
     const val kotlin = "2.0.20"
 
+    const val jwt = "0.12.6"
+
     const val apacheCommonsLang = "3.12.0"
     const val apacheCommonsCollections = "4.4"
     const val fixtureMonkey = "0.4.12"

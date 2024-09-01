@@ -1,4 +1,7 @@
 package fast.campus.netplix.auth.response;
 
-public record TokenResponse(String grantType, String accessToken) {
+import lombok.Builder;
+
+@Builder
+public record TokenResponse(String grantType, String accessToken, String refreshToken) {
 }

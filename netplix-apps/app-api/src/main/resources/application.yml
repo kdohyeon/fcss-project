@@ -4,6 +4,9 @@ spring:
       - 'classpath:adapter-http-property.yml'
       - 'classpath:adapter-persistence-property.yml'
 
+jwt:
+  secret: 7e0b9479f72ce9dd31b6c8c661bb047b2dcfc324d81b78de870959a38826f712
+
 management:
   endpoints:
     web:

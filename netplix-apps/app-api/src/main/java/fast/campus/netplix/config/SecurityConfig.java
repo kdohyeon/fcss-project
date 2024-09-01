@@ -1,5 +1,7 @@
 package fast.campus.netplix.config;
 
+import fast.campus.netplix.authentication.token.JwtAuthenticationFilter;
+import fast.campus.netplix.authentication.token.JwtTokenProvider;
 import fast.campus.netplix.security.NetplixUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,12 +12,14 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final JwtTokenProvider jwtTokenProvider;
     private final NetplixUserDetailsService netplixUserDetailsService;
 
     @Bean
@@ -33,6 +37,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated());
 
         httpSecurity.userDetailsService(netplixUserDetailsService);
+
+        httpSecurity.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
