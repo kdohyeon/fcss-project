@@ -1,5 +1,6 @@
 package fast.campus.netplix.config;
 
+import fast.campus.netplix.security.NetplixUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +15,25 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final NetplixUserDetailsService netplixUserDetailsService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.authorizeHttpRequests(a -> a.requestMatchers("/api/v1/user/**").permitAll()
+
+        httpSecurity.formLogin(form -> form.loginPage("/login")
+                .defaultSuccessUrl("/home", true)
+                .permitAll()
+        );
+        httpSecurity.logout(logout -> logout
+                .permitAll());
+        httpSecurity.authorizeHttpRequests(a -> a.requestMatchers("/", "/api/v1/user/**", "/api/v1/auth/**").permitAll()
                 .anyRequest().authenticated());
+
+        httpSecurity.userDetailsService(netplixUserDetailsService);
+
         return httpSecurity.build();
     }
 

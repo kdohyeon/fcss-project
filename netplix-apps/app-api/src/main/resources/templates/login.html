@@ -1,0 +1,23 @@
+<body class="text-center">
+<form class="form-signin" th:action="@{/login}" method="post"> <!-- 요청 보내기-->
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+    <div th:if="${param.error}"  class="alert alert-danger" role="alert">
+        Invalid username and password
+    </div>
+
+    <div th:if="${param.logout}"  class="alert alert-primary" role="alert">
+        You have been logged out
+    </div>
+
+    <label for="username" class="sr-only">username</label>
+    <input type="text" id="username" name="username" class="form-control" placeholder="username" required autofocus>
+
+    <label for="password" class="sr-only">password</label>
+    <input type="password" id="password" name="password" class="form-control" placeholder="password" required>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
+</form>
+</body>

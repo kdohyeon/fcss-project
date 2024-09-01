@@ -22,7 +22,7 @@ public class UserController {
     public NetplixApiResponse<SimpleUserResponse> findUserByEmail(
             @PathVariable String email
     ) {
-        return NetplixApiResponse.ok(fetchUserUseCase.findUserByEmail(email));
+        return NetplixApiResponse.ok(fetchUserUseCase.findSimpleUserByEmail(email));
     }
 
 

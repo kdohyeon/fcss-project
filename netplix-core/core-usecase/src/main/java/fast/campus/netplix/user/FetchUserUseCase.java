@@ -1,7 +1,9 @@
 package fast.campus.netplix.user;
 
+import fast.campus.netplix.user.response.DetailUserResponse;
 import fast.campus.netplix.user.response.SimpleUserResponse;
 
 public interface FetchUserUseCase {
-    SimpleUserResponse findUserByEmail(String email);
+    SimpleUserResponse findSimpleUserByEmail(String email);
+    DetailUserResponse findDetailUserByEmail(String email);
 }

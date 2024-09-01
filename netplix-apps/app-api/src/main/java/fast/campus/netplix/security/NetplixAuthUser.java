@@ -1,43 +1,27 @@
 package fast.campus.netplix.security;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 
-public class NetplixAuthUser implements UserDetails {
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
+@Getter
+public class NetplixAuthUser extends User {
 
-    @Override
-    public String getPassword() {
-        return null;
-    }
+    private final String userId;
+    private final String username;
+    private final String password;
+    private final String email;
+    private final String phone;
 
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+    public NetplixAuthUser(String userId, String username, String password,
+                           String email, String phone, Collection<? extends GrantedAuthority> authorities) {
+        super(email, password, authorities);
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
     }
 }
