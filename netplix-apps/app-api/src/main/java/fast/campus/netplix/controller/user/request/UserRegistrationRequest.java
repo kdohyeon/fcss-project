@@ -1,4 +1,4 @@
-package fast.campus.netplix.controller.auth.request;
+package fast.campus.netplix.controller.user.request;
 
 import fast.campus.netplix.annotation.PasswordEncryption;
 import lombok.Getter;

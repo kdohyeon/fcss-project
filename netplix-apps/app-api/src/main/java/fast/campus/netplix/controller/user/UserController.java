@@ -1,9 +1,9 @@
-package fast.campus.netplix.controller.auth;
+package fast.campus.netplix.controller.user;
 
 import fast.campus.netplix.auth.RegisterUserUseCase;
 import fast.campus.netplix.auth.command.UserRegistrationCommand;
 import fast.campus.netplix.controller.NetplixApiResponse;
-import fast.campus.netplix.controller.auth.request.UserRegistrationRequest;
+import fast.campus.netplix.controller.user.request.UserRegistrationRequest;
 import fast.campus.netplix.auth.response.UserRegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class UserController {
 
     private final RegisterUserUseCase registerUserUseCase;
 

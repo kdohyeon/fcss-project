@@ -3,8 +3,8 @@ POST http://localhost:8080/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "username": "",
-  "password": "",
-  "email": "",
-  "phone": ""
+  "username": "danny.kim",
+  "password": "12345",
+  "email": "danny.kim@kakaobank.com",
+  "phone": "010-1234-5678"
 }
