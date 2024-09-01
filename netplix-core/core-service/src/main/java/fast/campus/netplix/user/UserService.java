@@ -1,8 +1,13 @@
-package fast.campus.netplix.auth;
+package fast.campus.netplix.user;
 
-import fast.campus.netplix.auth.command.UserRegistrationCommand;
-import fast.campus.netplix.auth.response.UserRegistrationResponse;
+import fast.campus.netplix.auth.CreateUser;
+import fast.campus.netplix.auth.InsertUserPort;
+import fast.campus.netplix.auth.NetplixUser;
+import fast.campus.netplix.auth.SearchUserPort;
 import fast.campus.netplix.exception.UserException;
+import fast.campus.netplix.user.command.UserRegistrationCommand;
+import fast.campus.netplix.user.response.SimpleUserResponse;
+import fast.campus.netplix.user.response.UserRegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserAuthService implements RegisterUserUseCase {
+public class UserService implements RegisterUserUseCase, FetchUserUseCase {
 
     private final SearchUserPort searchUserPort;
     private final InsertUserPort insertUserPort;
@@ -31,5 +36,16 @@ public class UserAuthService implements RegisterUserUseCase {
                         .build()
         );
         return new UserRegistrationResponse(netplixUser.getUsername(), netplixUser.getEmail(), netplixUser.getPhone());
+    }
+
+    @Override
+    public SimpleUserResponse findUserByEmail(String email) {
+        Optional<NetplixUser> byEmail = searchUserPort.findByEmail(email);
+        if (byEmail.isEmpty()) {
+            throw new UserException.UserDoesNotExistException();
+        }
+        NetplixUser netplixUser = byEmail.get();
+
+        return new SimpleUserResponse(netplixUser.getUsername(), netplixUser.getEmail(), netplixUser.getPhone());
     }
 }
