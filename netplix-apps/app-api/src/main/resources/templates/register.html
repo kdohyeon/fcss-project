@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <link rel="stylesheet" href="/css/join.css">
+</head>
+<div layout:fragment="content" class="join-body">
+    <h1>회원가입</h1>
+    <form class="form" th:action="@{/user/join/email}" method="post" th:object="${emailJoinRequestDto}">
+        <div class="form-group">
+            <label class="h5" th:for="nickname">닉네임 </label>
+            <input type="text" th:field="*{nickname}" class="form-control" placeholder="닉네임을 입력하세요."
+                   th:class="${#fields.hasErrors('nickname')}? 'form-control fieldError' : 'form-control'"/>
+            <p class="error-message" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">INPUT ERROR</p>
+        </div>
+        <div class="form-group">
+            <label class="h5" th:for="email">이메일 </label>
+            <input type="email" th:field="*{email}" id="email" class="form-control" placeholder="이메일을 입력하세요."
+                   th:class="${#fields.hasErrors('email')}? 'form-control fieldError' : 'form-control'"/>
+            <p class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">INPUT ERROR</p>
+        </div>
+        <div class="form-group">
+            <div id="email-auth">
+                <label class="h5" th:for="code">인증 코드 </label>
+                <button type="button" id="codeSendBtn" class="btn btn-sm btn-primary" th:disabled="${success}">인증 코드 발송</button>
+                <p class="error-message" th:if="${msg}!=null" th:text="${msg}"></p>
+            </div>
+            <input type="text" th:field="*{code}" class="form-control" placeholder="인증코드를 입력하세요.(제한시간 30분)"
+                   th:class="${#fields.hasErrors('code')}? 'form-control fieldError' : 'form-control'"/>
+            <p class="error-message" th:if="${#fields.hasErrors('code')}" th:errors="*{code}">INPUT ERROR</p>
+        </div>
+        <div class="form-group">
+            <label class="h5" th:for="password">비밀번호 </label>
+            <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호를 입력하세요."
+                   th:class="${#fields.hasErrors('password')}? 'form-control fieldError' : 'form-control'"/>
+            <p class="error-message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">INPUT ERROR</p>
+        </div>
+        <button type="submit" class="btn btn-primary">회원가입</button>
+    </form>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.getElementById("codeSendBtn").addEventListener("click", sendCode);
+        function sendCode() {
+            let email = $('#email').val();
+            if (email.length !== 0) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/email/send',
+                    data: {
+                        email: email
+                    }
+                }).done(function (result) {
+                    $("#email-auth").replaceWith(result);
+                })
+                    .fail(function (jqXHR) {
+                        console.log(jqXHR);
+                    });
+            }
+            else{
+                console.log("fieldError : 이메일 값이 없음");
+                alert("이메일을 입력해주세요.");
+            }
+        }
+        /*]]>*/
+    </script>
+</div>
+</html>
