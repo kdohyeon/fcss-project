@@ -9,7 +9,7 @@
 - docker-compose 파일 실행
 
 ```shell
-docker-compose -f ./infra/docker-compose-mysql.yml up -d
+docker-compose -f ./infra/docker-compose.yml up -d
 
 docker ps -a
 ```

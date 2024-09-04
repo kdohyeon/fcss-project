@@ -2,3 +2,10 @@ tmdb:
   auth:
     api-key: edfd92ce3581d88f803092a607e9a207
     access-token: eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlZGZkOTJjZTM1ODFkODhmODAzMDkyYTYwN2U5YTIwNyIsIm5iZiI6MTcyNDc3MDUzMi4xMzc0MTEsInN1YiI6IjY2Y2RlNzY3YWU3ZTYyMDgxMGM0MjNkNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7k83fwKmyXcJ9ehVBz2kbnjqFYZZgTQb_4_twXUzqEE
+
+  api:
+    movie-lists:
+      now-playing: https://api.themoviedb.org/3/movie/now_playing
+      popular: https://api.themoviedb.org/3/movie/popular
+      top-rated: https://api.themoviedb.org/3/movie/top_rated
+      upcoming: https://api.themoviedb.org/3/movie/upcoming

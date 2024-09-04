@@ -9,6 +9,7 @@ import java.time.Duration;
 @Repository
 @RequiredArgsConstructor
 public class RedisRepository {
+
     private final RedisTemplate<String, String> redisTemplate;
 
     public String getValue(String key) {

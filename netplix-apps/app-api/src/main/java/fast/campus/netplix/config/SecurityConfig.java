@@ -33,8 +33,13 @@ public class SecurityConfig {
         );
         httpSecurity.logout(logout -> logout
                 .permitAll());
-        httpSecurity.authorizeHttpRequests(a -> a.requestMatchers("/", "/api/v1/user/**", "/api/v1/auth/**").permitAll()
-                .anyRequest().authenticated());
+        httpSecurity.authorizeHttpRequests(a ->
+                a.requestMatchers("/",
+                                "/api/v1/user/**",
+                                "/api/v1/auth/**",
+                                "/api/v1/sample/**"
+                        ).permitAll()
+                        .anyRequest().authenticated());
 
         httpSecurity.userDetailsService(netplixUserDetailsService);
 

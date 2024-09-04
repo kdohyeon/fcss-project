@@ -7,6 +7,7 @@ build/
 .gradle/
 out/
 infra/db
+infra/redis/data
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

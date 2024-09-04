@@ -13,3 +13,12 @@ services:
       - ./db/mysql/data:/var/lib/mysql
       - ./db/mysql/init:/docker-entrypoint-initdb.d
     platform: linux/x86_64
+
+  redis:
+    container_name: netplix-redis
+    hostname: redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    command: redis-server
+    restart: always
