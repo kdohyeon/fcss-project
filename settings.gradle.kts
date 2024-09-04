@@ -17,6 +17,7 @@ include("netplix-apps:app-batch")
 
 include("netplix-adapters:adapter-http")
 include("netplix-adapters:adapter-persistence")
+include("netplix-adapters:adapter-redis")
 
 include("netplix-core:core-domain")
 include("netplix-core:core-port")
