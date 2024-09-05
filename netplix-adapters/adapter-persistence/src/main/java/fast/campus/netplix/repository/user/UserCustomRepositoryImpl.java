@@ -1,7 +1,7 @@
 package fast.campus.netplix.repository.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import fast.campus.netplix.entity.UserEntity;
+import fast.campus.netplix.entity.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

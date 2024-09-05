@@ -1,4 +1,4 @@
-package fast.campus.netplix.entity;
+package fast.campus.netplix.entity.audit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

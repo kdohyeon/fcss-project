@@ -24,7 +24,6 @@ dependencies {
     integrationImplementation("org.springframework.boot:spring-boot-starter-test")
     integrationImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     integrationImplementation("io.rest-assured:spring-mock-mvc")
-    integrationRuntimeOnly("com.h2database:h2")
 
     integrationImplementation("com.epages:restdocs-api-spec-mockmvc")
 

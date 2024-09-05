@@ -4,7 +4,7 @@ import fast.campus.netplix.auth.CreateUser;
 import fast.campus.netplix.auth.InsertUserPort;
 import fast.campus.netplix.auth.NetplixUser;
 import fast.campus.netplix.auth.SearchUserPort;
-import fast.campus.netplix.entity.UserEntity;
+import fast.campus.netplix.entity.user.UserEntity;
 import fast.campus.netplix.exception.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

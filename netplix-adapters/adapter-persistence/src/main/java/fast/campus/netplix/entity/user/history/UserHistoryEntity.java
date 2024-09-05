@@ -1,5 +1,6 @@
-package fast.campus.netplix.entity;
+package fast.campus.netplix.entity.user.history;
 
+import fast.campus.netplix.entity.audit.MutableBaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
