@@ -1,4 +1,4 @@
-package fast.campus.netplix.configure;
+package fast.campus.netplix.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;

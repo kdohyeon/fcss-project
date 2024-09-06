@@ -1,4 +1,4 @@
-package fast.campus.netplix.configure;
+package fast.campus.netplix.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

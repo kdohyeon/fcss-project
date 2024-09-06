@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-import static fast.campus.netplix.entity.QUserEntity.userEntity;
+import static fast.campus.netplix.entity.user.QUserEntity.userEntity;
+
 
 @Repository
 @RequiredArgsConstructor

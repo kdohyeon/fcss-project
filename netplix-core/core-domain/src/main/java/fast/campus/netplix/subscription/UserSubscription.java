@@ -1,13 +1,11 @@
 package fast.campus.netplix.subscription;
 
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Slf4j
 @Getter
 public class UserSubscription {
     private String userSubscriptionId;
@@ -17,8 +15,8 @@ public class UserSubscription {
     private LocalDateTime endAt;
     private Boolean validYn;
 
-    public UserSubscription(String userSubscriptionId, String userId, SubscriptionType subscriptionType, LocalDateTime startAt, LocalDateTime endAt, Boolean validYn) {
-        this.userSubscriptionId = UUID.randomUUID().toString();;
+    public UserSubscription(String userId, SubscriptionType subscriptionType, LocalDateTime startAt, LocalDateTime endAt, Boolean validYn) {
+        this.userSubscriptionId = UUID.randomUUID().toString();
         this.userId = userId;
         this.subscriptionType = subscriptionType;
         this.startAt = startAt;
