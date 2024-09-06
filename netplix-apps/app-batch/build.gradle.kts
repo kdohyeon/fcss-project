@@ -1,5 +1,6 @@
 dependencies {
     implementation(project(":netplix-core:core-usecase"))
+    implementation(project(":netplix-adapters:adapter-persistence"))
     implementation(project(":netplix-commons"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
