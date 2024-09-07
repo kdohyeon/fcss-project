@@ -2,6 +2,7 @@ package fast.campus.netplix.config;
 
 import fast.campus.netplix.authentication.token.JwtAuthenticationFilter;
 import fast.campus.netplix.authentication.token.JwtTokenProvider;
+import fast.campus.netplix.security.NetplixLoginSuccessHandler;
 import fast.campus.netplix.security.NetplixLogoutSuccessHandler;
 import fast.campus.netplix.security.NetplixUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final NetplixUserDetailsService netplixUserDetailsService;
 
+    private final NetplixLoginSuccessHandler loginSuccessHandler;
     private final NetplixLogoutSuccessHandler logoutSuccessHandler;
 
     @Bean
@@ -32,10 +34,11 @@ public class SecurityConfig {
         httpSecurity.cors(AbstractHttpConfigurer::disable);
 
         httpSecurity.formLogin(form -> form.loginPage("/login")
-                .defaultSuccessUrl("/home", true)
                 .permitAll()
+                .successHandler(loginSuccessHandler)
         );
         httpSecurity.logout(logout -> logout
+                .logoutUrl("/logout")
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .permitAll());
         httpSecurity.authorizeHttpRequests(a ->

@@ -26,6 +26,11 @@ public class AuthFormController {
         return "login.html";
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        return "main.html";
+    }
+
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("user", new NetplixFormUser());
