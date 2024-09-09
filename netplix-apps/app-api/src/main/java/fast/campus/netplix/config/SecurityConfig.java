@@ -2,6 +2,8 @@ package fast.campus.netplix.config;
 
 import fast.campus.netplix.authentication.token.JwtAuthenticationFilter;
 import fast.campus.netplix.authentication.token.JwtTokenProvider;
+import fast.campus.netplix.oauth.CustomOAuth2UserService;
+import fast.campus.netplix.oauth.OAuthLoginSuccessHandler;
 import fast.campus.netplix.security.NetplixLoginSuccessHandler;
 import fast.campus.netplix.security.NetplixLogoutSuccessHandler;
 import fast.campus.netplix.security.NetplixUserDetailsService;
@@ -27,6 +29,9 @@ public class SecurityConfig {
     private final NetplixLoginSuccessHandler loginSuccessHandler;
     private final NetplixLogoutSuccessHandler logoutSuccessHandler;
 
+    private final OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
@@ -49,6 +54,13 @@ public class SecurityConfig {
                                 "/api/v1/sample/**"
                         ).permitAll()
                         .anyRequest().authenticated());
+        httpSecurity.oauth2Login(oauth2 -> oauth2
+                .loginPage("/login")
+                .defaultSuccessUrl("/")
+                .failureUrl("/login?error=true")
+                .successHandler(oAuthLoginSuccessHandler)
+                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+        );
 
         httpSecurity.userDetailsService(netplixUserDetailsService);
 

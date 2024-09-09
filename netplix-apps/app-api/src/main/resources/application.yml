@@ -4,7 +4,24 @@ spring:
       - 'classpath:adapter-http-property.yml'
       - 'classpath:adapter-persistence-property.yml'
       - 'classpath:adapter-redis-property.yml'
-
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 9a316d2c8c256cd791204a9eb006f7af
+            client-secret: DTDbRT1xfv3mWLe1k3Lnshs4fOgXGp5u
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+            scope: profile_nickname
+            client-authentication-method: client_secret_post
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 jwt:
   secret: 7e0b9479f72ce9dd31b6c8c661bb047b2dcfc324d81b78de870959a38826f712
 
