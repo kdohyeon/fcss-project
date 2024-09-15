@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function Login({ setIsLoggedIn }) {
     const [username, setUsername] = useState('danny.kim@kakaobank.com');
     const [password, setPassword] = useState('');
-    const KAKAO_AUTH_URL = `http://localhost:8080/oauth2/authorization/kakao`;
 
     const navigate = useNavigate();  // 페이지 이동을 위한 useNavigate 훅 사용
 
@@ -23,11 +22,10 @@ function Login({ setIsLoggedIn }) {
                 alert('로그인 실패. ' + response.data.code);
             } else {
                 // 응답이 성공하면 로그인 처리 (토큰 저장 등)
-                console.log('Login successful:', response.data);
                 // 예: localStorage에 토큰 저장
-                localStorage.setItem('token', response.data.token);
-                setIsLoggedIn(true)
+                localStorage.setItem('token', response.data.data.accessToken);
                 // 이후 페이지 이동 또는 로그인 처리 로직 추가
+                setIsLoggedIn(true)
                 // 예: 대시보드로 이동
                 navigate('/dashboard');
             }
@@ -39,7 +37,7 @@ function Login({ setIsLoggedIn }) {
     };
 
     const handleKakaoLogin = () => {
-        window.location.href = KAKAO_AUTH_URL;  // 카카오 로그인 페이지로 리디렉션
+        window.location.href = `http://localhost:8080/oauth2/authorization/kakao`;  // 카카오 로그인 페이지로 리디렉션
     };
 
     return (

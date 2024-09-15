@@ -33,11 +33,14 @@ public class KakaoUserHttpClient implements KakaoUserPort {
                 Map.class
         );
 
+        Long providerId = (Long) response.getBody().get("id");
+
         Map properties = (Map) response.getBody().get("properties");
         String nickname = (String) properties.get("nickname");
 
         return NetplixUser.builder()
                 .username(nickname)
+                .providerId(providerId.toString())
                 .build();
     }
 }

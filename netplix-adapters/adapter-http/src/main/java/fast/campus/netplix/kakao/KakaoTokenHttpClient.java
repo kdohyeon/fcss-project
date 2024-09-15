@@ -1,7 +1,6 @@
 package fast.campus.netplix.kakao;
 
 import fast.campus.netplix.auth.KakaoTokenPort;
-import fast.campus.netplix.auth.NetplixToken;
 import fast.campus.netplix.client.HttpClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +30,7 @@ public class KakaoTokenHttpClient implements KakaoTokenPort {
     private final HttpClient httpClient;
 
     @Override
-    public NetplixToken getAccessTokenByCode(String code) {
+    public String getAccessTokenByCode(String code) {
         RestTemplate restTemplate = new RestTemplate();
 
         // 요청 파라미터
@@ -52,9 +51,6 @@ public class KakaoTokenHttpClient implements KakaoTokenPort {
         // POST 요청 보내기
         ResponseEntity<Map> response = restTemplate.exchange(KAKAO_TOKEN_URL, HttpMethod.POST, request, Map.class);
 
-        String accessToken = (String) response.getBody().get("access_token");
-        String refreshToken = (String) response.getBody().get("refresh_token");
-
-        return new NetplixToken(accessToken, refreshToken);
+        return (String) response.getBody().get("access_token");
     }
 }

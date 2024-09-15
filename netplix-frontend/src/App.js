@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {BrowserRouter as Router, Routes, Route, Link, useNavigate} from 'react-router-dom';
+import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
-import axios from "axios";
 import Main from "./pages/Main";
 import KakaoAuthRedirect from "./pages/KakaoAuthRedirect";
 
@@ -14,6 +13,7 @@ function App() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        console.log('token=', token)
         if (token) {
             setIsLoggedIn(true);
         }
@@ -22,7 +22,6 @@ function App() {
     const handleLogout = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8080/api/v1/auth/logout')
             // 로컬 스토리지에서 토큰 삭제
             localStorage.removeItem('token');
             // 로그인 페이지로 리디렉션
@@ -67,16 +66,16 @@ function App() {
                 {/* 페이지 라우팅 */}
                 <div className="container mt-5">
                     <Routes>
-                        <Route path="/" element={<Main />}/>
-                        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
-                        <Route path="/signup" element={<Signup />} />
-                        <Route path="/login/oauth2/code/kakao" element={<KakaoAuthRedirect />} />
+                        <Route path="/" element={<Main/>}/>
+                        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn}/>}/>
+                        <Route path="/signup" element={<Signup/>}/>
+                        <Route path="/login/oauth2/code/kakao" element={<KakaoAuthRedirect/>}/>
 
                         <Route path="/dashboard" element={
                             <ProtectedRoute>
                                 <Dashboard />
                             </ProtectedRoute>
-                        } />
+                        }/>
                     </Routes>
                 </div>
             </div>

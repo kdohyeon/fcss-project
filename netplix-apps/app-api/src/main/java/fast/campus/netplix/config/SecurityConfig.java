@@ -37,10 +37,8 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(a ->
                 a.requestMatchers("/",
                                 "/register",
-                                "/login/oauth2/code/kakao",
                                 "/api/v1/user/**",
-                                "/api/v1/auth/**",
-                                "/api/v1/sample/**"
+                                "/api/v1/auth/**"
                         ).permitAll()
                         .anyRequest().authenticated());
         httpSecurity.oauth2Login(oauth2 -> oauth2

@@ -3,14 +3,11 @@ package fast.campus.netplix.controller.auth;
 import fast.campus.netplix.auth.FetchTokenUseCase;
 import fast.campus.netplix.auth.UpdateTokenUseCase;
 import fast.campus.netplix.auth.response.TokenResponse;
-import fast.campus.netplix.authentication.CookieUtil;
 import fast.campus.netplix.controller.NetplixApiResponse;
 import fast.campus.netplix.controller.auth.request.LoginRequest;
 import fast.campus.netplix.security.NetplixAuthUser;
 import fast.campus.netplix.user.FetchUserUseCase;
 import fast.campus.netplix.user.response.SimpleUserResponse;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +30,6 @@ public class AuthController {
     private final FetchTokenUseCase fetchTokenUseCase;
     private final FetchUserUseCase fetchUserUseCase;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final CookieUtil cookieUtil;
 
     @PostMapping("/login")
     public NetplixApiResponse<TokenResponse> login(@RequestBody LoginRequest request) {
@@ -50,22 +46,12 @@ public class AuthController {
         return NetplixApiResponse.ok(tokenResponse);
     }
 
-    @PostMapping("/logout")
-    public NetplixApiResponse<Void> logout(HttpServletResponse response) {
-        Cookie cookie = cookieUtil.deleteCookie();
-        response.addCookie(cookie);
-        return NetplixApiResponse.ok(null);
-    }
-
     @PostMapping("/callback")
     public NetplixApiResponse<TokenResponse> kakaoCallback(@RequestBody Map<String, String> request) {
         String code = request.get("code");
 
-        TokenResponse tokenFromKakao = fetchTokenUseCase.getTokenFromKakao(code);
-
-        SimpleUserResponse kakaoUser = fetchUserUseCase.findKakaoUser(tokenFromKakao.accessToken());
-        log.info("kakao user={}", kakaoUser.username());
-
-        return NetplixApiResponse.ok(tokenFromKakao);
+        String tokenFromKakao = fetchTokenUseCase.getTokenFromKakao(code);
+        String providerId = fetchUserUseCase.findKakaoProviderId(tokenFromKakao);
+        return NetplixApiResponse.ok(fetchTokenUseCase.findTokenByUserId(providerId));
     }
 }

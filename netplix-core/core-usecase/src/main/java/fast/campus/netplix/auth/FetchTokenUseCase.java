@@ -10,5 +10,5 @@ public interface FetchTokenUseCase {
 
     Boolean validateToken(String accessToken);
 
-    TokenResponse getTokenFromKakao(String code);
+    String getTokenFromKakao(String code);
 }

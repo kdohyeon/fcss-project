@@ -9,5 +9,5 @@ public interface FetchUserUseCase {
 
     SimpleUserResponse findSimpleUserByProviderId(String providerId);
 
-    SimpleUserResponse findKakaoUser(String accessToken);
+    String findKakaoProviderId(String accessToken);
 }

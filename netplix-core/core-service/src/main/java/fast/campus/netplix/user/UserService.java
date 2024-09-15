@@ -87,8 +87,8 @@ public class UserService implements RegisterUserUseCase, FetchUserUseCase {
     }
 
     @Override
-    public SimpleUserResponse findKakaoUser(String accessToken) {
+    public String findKakaoProviderId(String accessToken) {
         NetplixUser userFromKakao = kakaoUserPort.findUserFromKakao(accessToken);
-        return new SimpleUserResponse(userFromKakao.getUsername(), null, null);
+        return userFromKakao.getProviderId();
     }
 }

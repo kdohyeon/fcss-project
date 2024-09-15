@@ -87,9 +87,8 @@ public class TokenService implements FetchTokenUseCase, CreateTokenUseCase, Upda
     }
 
     @Override
-    public TokenResponse getTokenFromKakao(String code) {
-        NetplixToken accessTokenByCode = kakaoTokenPort.getAccessTokenByCode(code);
-        return new TokenResponse(accessTokenByCode.getAccessToken(), accessTokenByCode.getRefreshToken());
+    public String getTokenFromKakao(String code) {
+        return kakaoTokenPort.getAccessTokenByCode(code);
     }
 
     private Claims parseClaims(String accessToken) {
