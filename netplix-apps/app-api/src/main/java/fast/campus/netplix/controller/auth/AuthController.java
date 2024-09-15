@@ -1,11 +1,18 @@
 package fast.campus.netplix.controller.auth;
 
-import fast.campus.netplix.auth.AuthUseCase;
+import fast.campus.netplix.auth.FetchTokenUseCase;
+import fast.campus.netplix.auth.UpdateTokenUseCase;
 import fast.campus.netplix.auth.response.TokenResponse;
-import fast.campus.netplix.authentication.token.JwtTokenProvider;
+import fast.campus.netplix.authentication.CookieUtil;
 import fast.campus.netplix.controller.NetplixApiResponse;
 import fast.campus.netplix.controller.auth.request.LoginRequest;
+import fast.campus.netplix.security.NetplixAuthUser;
+import fast.campus.netplix.user.FetchUserUseCase;
+import fast.campus.netplix.user.response.SimpleUserResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -14,30 +21,51 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthUseCase authUseCase;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final UpdateTokenUseCase updateTokenUseCase;
+    private final FetchTokenUseCase fetchTokenUseCase;
+    private final FetchUserUseCase fetchUserUseCase;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
+    private final CookieUtil cookieUtil;
 
     @PostMapping("/login")
     public NetplixApiResponse<TokenResponse> login(@RequestBody LoginRequest request) {
-        // 1. username + password 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 request.getEmail(), request.getPassword());
 
-        // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
-        // authenticate 메서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        Authentication authentication = authenticationManagerBuilder.getObject()
+                .authenticate(authenticationToken);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenResponse jwtToken = jwtTokenProvider.generateToken(authentication);
+        NetplixAuthUser principal = (NetplixAuthUser) authentication.getPrincipal();
 
-        return NetplixApiResponse.ok(jwtToken);
+        TokenResponse tokenResponse = updateTokenUseCase.upsertToken(principal.getEmail());
+
+        return NetplixApiResponse.ok(tokenResponse);
+    }
+
+    @PostMapping("/logout")
+    public NetplixApiResponse<Void> logout(HttpServletResponse response) {
+        Cookie cookie = cookieUtil.deleteCookie();
+        response.addCookie(cookie);
+        return NetplixApiResponse.ok(null);
+    }
+
+    @PostMapping("/callback")
+    public NetplixApiResponse<TokenResponse> kakaoCallback(@RequestBody Map<String, String> request) {
+        String code = request.get("code");
+
+        TokenResponse tokenFromKakao = fetchTokenUseCase.getTokenFromKakao(code);
+
+        SimpleUserResponse kakaoUser = fetchUserUseCase.findKakaoUser(tokenFromKakao.accessToken());
+        log.info("kakao user={}", kakaoUser.username());
+
+        return NetplixApiResponse.ok(tokenFromKakao);
     }
 }

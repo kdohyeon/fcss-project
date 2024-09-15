@@ -1,4 +1,4 @@
-package fast.campus.netplix.auth;
+package fast.campus.netplix.user;
 
 import lombok.Builder;
 import lombok.Getter;

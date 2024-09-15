@@ -2,7 +2,6 @@ package fast.campus.netplix.entity.user;
 
 import fast.campus.netplix.auth.NetplixUser;
 import fast.campus.netplix.entity.audit.MutableBaseEntity;
-import fast.campus.netplix.user.CreateUser;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,49 +14,35 @@ import java.util.UUID;
 
 @Getter
 @Entity
-@Table(name = "users")
+@Table(name = "social_users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserEntity extends MutableBaseEntity {
+public class SocialUserEntity extends MutableBaseEntity {
     @Id
-    @Column(name = "USER_ID")
-    private String userId;
+    @Column(name = "SOCIAL_USER_ID")
+    private String socialUserId;
 
     @Column(name = "USER_NAME")
     private String username;
 
-    @Column(name = "PASSWORD")
-    private String password;
+    @Column(name = "PROVIDER")
+    private String provider;
 
-    @Column(name = "EMAIL")
-    private String email;
+    @Column(name = "PROVIDER_ID")
+    private String providerId;
 
-    @Column(name = "PHONE")
-    private String phone;
-
-    public UserEntity(String username, String password, String email, String phone) {
-        this.userId = UUID.randomUUID().toString();
+    public SocialUserEntity(String username, String provider, String providerId) {
+        this.socialUserId = UUID.randomUUID().toString();
         this.username = username;
-        this.password = password;
-        this.email = email;
-        this.phone = phone;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 
     public NetplixUser toDomain() {
         return NetplixUser.builder()
-                .userId(this.userId)
+                .userId(this.socialUserId)
                 .username(this.username)
-                .encryptedPassword(this.password)
-                .email(this.email)
-                .phone(this.phone)
+                .provider(this.provider)
+                .providerId(this.providerId)
                 .build();
-    }
-
-    public static UserEntity toEntity(CreateUser createUser) {
-        return new UserEntity(
-                createUser.getUsername(),
-                createUser.getEncryptedPassword(),
-                createUser.getEmail(),
-                createUser.getPhone()
-        );
     }
 }

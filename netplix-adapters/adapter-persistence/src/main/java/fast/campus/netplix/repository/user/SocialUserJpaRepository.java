@@ -1,8 +1,8 @@
 package fast.campus.netplix.repository.user;
 
-import fast.campus.netplix.entity.user.UserEntity;
+import fast.campus.netplix.entity.user.SocialUserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserJpaRepository extends JpaRepository<UserEntity, String>, UserCustomRepository {
+public interface SocialUserJpaRepository extends JpaRepository<SocialUserEntity, String>, SocialUserCustomRepository {
 
 }

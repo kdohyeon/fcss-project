@@ -75,6 +75,12 @@ configureByLabels("java") {
             dependency("com.epages:restdocs-api-spec:${Versions.restdocsApiSpec}")
             dependency("com.epages:restdocs-api-spec-mockmvc:${Versions.restdocsApiSpec}")
             dependency("com.epages:restdocs-api-spec-restassured:${Versions.restdocsApiSpec}")
+
+            dependencySet("io.jsonwebtoken:${Versions.jwt}") {
+                entry("jjwt-api")
+                entry("jjwt-impl")
+                entry("jjwt-jackson")
+            }
         }
     }
 

@@ -3,5 +3,5 @@ package fast.campus.netplix.user.command;
 import lombok.Builder;
 
 @Builder
-public record UserRegistrationCommand(String username, String encryptedPassword, String email, String phone) {
+public record SocialUserRegistrationCommand(String username, String provider, String providerId) {
 }

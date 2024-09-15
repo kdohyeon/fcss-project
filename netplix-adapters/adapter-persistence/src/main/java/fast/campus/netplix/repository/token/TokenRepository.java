@@ -1,42 +1,47 @@
-package fast.campus.netplix.repository.user;
+package fast.campus.netplix.repository.token;
 
-import fast.campus.netplix.auth.CreateUser;
-import fast.campus.netplix.auth.InsertUserPort;
-import fast.campus.netplix.auth.NetplixUser;
-import fast.campus.netplix.auth.SearchUserPort;
-import fast.campus.netplix.entity.user.UserEntity;
-import fast.campus.netplix.exception.UserException;
+import fast.campus.netplix.auth.NetplixToken;
+import fast.campus.netplix.entity.token.TokenEntity;
+import fast.campus.netplix.token.InsertTokenPort;
+import fast.campus.netplix.token.SearchTokenPort;
+import fast.campus.netplix.token.UpdateTokenPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class UserRepository implements SearchUserPort, InsertUserPort {
+public class TokenRepository implements SearchTokenPort, InsertTokenPort, UpdateTokenPort {
 
-    private final UserJpaRepository userJpaRepository;
+    private final TokenJpaRepository tokenJpaRepository;
 
     @Override
-    public Optional<NetplixUser> findByEmail(String email) {
-        return userJpaRepository.findByEmail(email)
-                .map(UserEntity::toDomain);
+    @Transactional
+    public NetplixToken create(String userId, String accessToken, String refreshToken) {
+        TokenEntity entity = TokenEntity.toEntity(userId, accessToken, refreshToken);
+        return tokenJpaRepository.save(entity)
+                .toDomain();
     }
 
     @Override
-    public NetplixUser getByEmail(String email) {
-        Optional<NetplixUser> byEmail = findByEmail(email);
-        if (byEmail.isEmpty()) {
-            throw new UserException.UserDoesNotExistException();
+    @Transactional(readOnly = true)
+    public Optional<NetplixToken> findByUserId(String userId) {
+        return tokenJpaRepository.findByUserId(userId)
+                .map(TokenEntity::toDomain);
+    }
+
+    @Override
+    @Transactional
+    public void updateToken(String userId, String accessToken, String refreshToken) {
+        Optional<TokenEntity> byUserId = tokenJpaRepository.findByUserId(userId);
+        if (byUserId.isEmpty()) {
+            throw new RuntimeException();
         }
 
-        return byEmail.get();
-    }
-
-    @Override
-    public NetplixUser create(CreateUser create) {
-        UserEntity user = UserEntity.toEntity(create);
-        return userJpaRepository.save(user)
-                .toDomain();
+        TokenEntity tokenEntity = byUserId.get();
+        tokenEntity.updateToken(accessToken, refreshToken);
+        tokenJpaRepository.save(tokenEntity);
     }
 }

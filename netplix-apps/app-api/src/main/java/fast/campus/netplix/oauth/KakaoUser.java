@@ -12,6 +12,11 @@ public class KakaoUser implements OAuth2ProviderUser {
 
     @Override
     public String getProvider() {
+        return "kakao";
+    }
+
+    @Override
+    public String getProviderId() {
         return attributes.get("id").toString();
     }
 

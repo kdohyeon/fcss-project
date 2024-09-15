@@ -1,9 +1,9 @@
-package fast.campus.netplix.repository.user;
+package fast.campus.netplix.repository.token;
 
-import fast.campus.netplix.entity.user.UserEntity;
+import fast.campus.netplix.entity.token.TokenEntity;
 
 import java.util.Optional;
 
-public interface UserCustomRepository {
-    Optional<UserEntity> findByEmail(String email);
+public interface TokenCustomRepository {
+    Optional<TokenEntity> findByUserId(String userId);
 }

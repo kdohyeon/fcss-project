@@ -2,6 +2,7 @@ package fast.campus.netplix.auth;
 
 import fast.campus.netplix.auth.response.TokenResponse;
 
-public interface CreateTokenUseCase {
-    TokenResponse createNewToken(String userId);
+public interface UpdateTokenUseCase {
+    TokenResponse updateNewToken(String userId);
+    TokenResponse upsertToken(String userId);
 }

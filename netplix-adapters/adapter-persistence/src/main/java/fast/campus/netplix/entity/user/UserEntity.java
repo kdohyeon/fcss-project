@@ -1,8 +1,8 @@
 package fast.campus.netplix.entity.user;
 
-import fast.campus.netplix.auth.CreateUser;
 import fast.campus.netplix.auth.NetplixUser;
 import fast.campus.netplix.entity.audit.MutableBaseEntity;
+import fast.campus.netplix.user.CreateUser;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

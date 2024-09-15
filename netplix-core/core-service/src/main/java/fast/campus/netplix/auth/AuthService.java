@@ -1,4 +1,4 @@
-package fast.campus.netplix;
+package fast.campus.netplix.auth;
 
 import fast.campus.netplix.auth.AuthUseCase;
 import fast.campus.netplix.auth.response.TokenResponse;

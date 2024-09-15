@@ -1,2 +1,5 @@
-package fast.campus.netplix.auth;public class KakaoTokenPort {
+package fast.campus.netplix.auth;
+
+public interface KakaoTokenPort {
+    NetplixToken getAccessTokenByCode(String code);
 }

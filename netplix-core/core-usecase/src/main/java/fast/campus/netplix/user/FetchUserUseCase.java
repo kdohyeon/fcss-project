@@ -8,4 +8,6 @@ public interface FetchUserUseCase {
     DetailUserResponse findDetailUserByEmail(String email);
 
     SimpleUserResponse findSimpleUserByProviderId(String providerId);
+
+    SimpleUserResponse findKakaoUser(String accessToken);
 }
