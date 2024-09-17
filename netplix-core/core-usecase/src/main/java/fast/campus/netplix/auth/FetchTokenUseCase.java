@@ -1,12 +1,12 @@
 package fast.campus.netplix.auth;
 
 import fast.campus.netplix.auth.response.TokenResponse;
-import fast.campus.netplix.user.response.DetailUserResponse;
+import fast.campus.netplix.user.response.SimpleUserResponse;
 
 public interface FetchTokenUseCase {
     TokenResponse findTokenByUserId(String userId);
 
-    DetailUserResponse findUserByAccessToken(String accessToken);
+    SimpleUserResponse findUserByAccessToken(String accessToken);
 
     Boolean validateToken(String accessToken);
 

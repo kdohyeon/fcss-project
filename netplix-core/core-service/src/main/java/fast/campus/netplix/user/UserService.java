@@ -6,6 +6,7 @@ import fast.campus.netplix.user.command.SocialUserRegistrationCommand;
 import fast.campus.netplix.user.command.UserRegistrationCommand;
 import fast.campus.netplix.user.response.DetailUserResponse;
 import fast.campus.netplix.user.response.SimpleUserResponse;
+import fast.campus.netplix.user.response.SocialUserResponse;
 import fast.campus.netplix.user.response.UserRegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -87,8 +88,10 @@ public class UserService implements RegisterUserUseCase, FetchUserUseCase {
     }
 
     @Override
-    public String findKakaoProviderId(String accessToken) {
+    public SocialUserResponse findKakaoUser(String accessToken) {
         NetplixUser userFromKakao = kakaoUserPort.findUserFromKakao(accessToken);
-        return userFromKakao.getProviderId();
+        return new SocialUserResponse(
+                userFromKakao.getUsername(), "kakao", userFromKakao.getProviderId()
+        );
     }
 }

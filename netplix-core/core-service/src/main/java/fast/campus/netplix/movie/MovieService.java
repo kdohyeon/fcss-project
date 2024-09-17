@@ -16,9 +16,15 @@ public class MovieService implements FetchMovieUseCase, InsertMovieUseCase {
     private final PersistenceMoviePort persistenceMoviePort;
 
     @Override
-    public MoviePageableResponse fetch(int page) {
+    public MoviePageableResponse fetchFromClient(int page) {
         NetplixPageableMovies movies = tmdbMoviePort.fetchPageable(page);
         return new MoviePageableResponse(movies.getNetplixMovies(), page, movies.isHasNext());
+    }
+
+    @Override
+    public MoviePageableResponse fetchFromDb(int page) {
+        List<NetplixMovie> netplixMovies = persistenceMoviePort.fetchBy(page);
+        return new MoviePageableResponse(netplixMovies, page, false);
     }
 
     @Override

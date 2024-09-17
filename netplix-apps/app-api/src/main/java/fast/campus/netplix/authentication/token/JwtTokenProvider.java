@@ -1,7 +1,7 @@
 package fast.campus.netplix.authentication.token;
 
 import fast.campus.netplix.auth.FetchTokenUseCase;
-import fast.campus.netplix.user.response.DetailUserResponse;
+import fast.campus.netplix.user.response.SimpleUserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,8 +20,8 @@ public class JwtTokenProvider {
     private final FetchTokenUseCase fetchTokenUseCase;
 
     public Authentication getAuthentication(String accessToken) {
-        DetailUserResponse userResponse = fetchTokenUseCase.findUserByAccessToken(accessToken);
-        UserDetails principal = new User(userResponse.email(), "", List.of());
+        SimpleUserResponse userResponse = fetchTokenUseCase.findUserByAccessToken(accessToken);
+        UserDetails principal = new User(userResponse.username(), "", List.of());
         return new UsernamePasswordAuthenticationToken(principal, "", List.of());
     }
 }

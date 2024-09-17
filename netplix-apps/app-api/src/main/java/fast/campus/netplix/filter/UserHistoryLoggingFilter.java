@@ -7,6 +7,7 @@ import fast.campus.netplix.logging.LogUserAuditHistoryUseCase;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Order(100)
 @Component
 @RequiredArgsConstructor
 public class UserHistoryLoggingFilter implements Filter {

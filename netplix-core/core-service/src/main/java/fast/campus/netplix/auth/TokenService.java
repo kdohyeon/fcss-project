@@ -5,7 +5,7 @@ import fast.campus.netplix.token.InsertTokenPort;
 import fast.campus.netplix.token.SearchTokenPort;
 import fast.campus.netplix.token.UpdateTokenPort;
 import fast.campus.netplix.user.FetchUserUseCase;
-import fast.campus.netplix.user.response.DetailUserResponse;
+import fast.campus.netplix.user.response.SimpleUserResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -13,10 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -55,24 +57,40 @@ public class TokenService implements FetchTokenUseCase, CreateTokenUseCase, Upda
     }
 
     @Override
-    public DetailUserResponse findUserByAccessToken(String accessToken) {
+    public SimpleUserResponse findUserByAccessToken(String accessToken) {
         Claims claims = parseClaims(accessToken);
 
-        if (claims.get("auth") == null) {
+        Object userId = claims.get("userId");
+
+        if (ObjectUtils.isEmpty(userId)) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
 
-        String subject = claims.getSubject();
-        return fetchUserUseCase.findDetailUserByEmail(subject);
+        return fetchUserUseCase.findSimpleUserByProviderId(userId.toString());
     }
 
     @Override
     public Boolean validateToken(String accessToken) {
         try {
-            Jwts.parser()
+            Jws<Claims> claimsJws = Jwts.parser()
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(accessToken);
+
+            String userId = (String) claimsJws.getPayload().get("userId");
+
+            Optional<NetplixToken> byUserId = searchTokenPort.findByUserId(userId);
+            if (byUserId.isEmpty()) {
+                throw new RuntimeException("토큰이 없습니다.");
+            }
+
+            LocalDateTime now = LocalDateTime.now();
+
+            NetplixToken netplixToken = byUserId.get();
+            if (now.isAfter(netplixToken.getAccessTokenExpireAt())) {
+                throw new RuntimeException("액세스 토큰이 만료되었습니다.");
+            }
+
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
@@ -130,6 +148,27 @@ public class TokenService implements FetchTokenUseCase, CreateTokenUseCase, Upda
         return searchTokenPort.findByUserId(userId)
                 .map(token -> updateNewToken(userId))
                 .orElseGet(() -> createNewToken(userId));
+    }
+
+    @Override
+    public TokenResponse reissueToken(String accessToken, String refreshToken) {
+        Jws<Claims> claimsJws = Jwts.parser()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(accessToken);
+
+        String userId = (String) claimsJws.getPayload().get("userId");
+        Optional<NetplixToken> byUserId = searchTokenPort.findByUserId(userId);
+        if (byUserId.isEmpty()) {
+            throw new RuntimeException("토큰이 유효하지 않습니다.");
+        }
+
+        NetplixToken netplixToken = byUserId.get();
+        if (!netplixToken.getRefreshToken().equals(refreshToken)) {
+            throw new RuntimeException("리프레시 토큰이 유효하지 않습니다.");
+        }
+
+        return updateNewToken(userId);
     }
 
     private SecretKey getSigningKey() {

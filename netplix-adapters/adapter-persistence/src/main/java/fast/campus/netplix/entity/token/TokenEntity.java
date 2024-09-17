@@ -58,6 +58,8 @@ public class TokenEntity extends MutableBaseEntity {
         return NetplixToken.builder()
                 .accessToken(this.accessToken)
                 .refreshToken(this.refreshToken)
+                .accessTokenExpireAt(this.accessTokenExpiresAt)
+                .refreshTokenExpireAt(this.refreshTokenExpiresAt)
                 .build();
     }
 

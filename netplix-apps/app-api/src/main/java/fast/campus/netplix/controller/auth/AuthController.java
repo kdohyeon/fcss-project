@@ -5,14 +5,21 @@ import fast.campus.netplix.auth.UpdateTokenUseCase;
 import fast.campus.netplix.auth.response.TokenResponse;
 import fast.campus.netplix.controller.NetplixApiResponse;
 import fast.campus.netplix.controller.auth.request.LoginRequest;
+import fast.campus.netplix.exception.ErrorCode;
 import fast.campus.netplix.security.NetplixAuthUser;
 import fast.campus.netplix.user.FetchUserUseCase;
+import fast.campus.netplix.user.RegisterUserUseCase;
+import fast.campus.netplix.user.command.SocialUserRegistrationCommand;
 import fast.campus.netplix.user.response.SimpleUserResponse;
+import fast.campus.netplix.user.response.SocialUserResponse;
+import io.micrometer.common.util.StringUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +37,7 @@ public class AuthController {
     private final FetchTokenUseCase fetchTokenUseCase;
     private final FetchUserUseCase fetchUserUseCase;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final RegisterUserUseCase registerUserUseCase;
 
     @PostMapping("/login")
     public NetplixApiResponse<TokenResponse> login(@RequestBody LoginRequest request) {
@@ -46,12 +54,32 @@ public class AuthController {
         return NetplixApiResponse.ok(tokenResponse);
     }
 
+    @PostMapping("/reissue")
+    public NetplixApiResponse<TokenResponse> reissue(HttpServletRequest httpServletRequest) {
+        String refreshToken = httpServletRequest.getHeader("refresh_token");
+        String accessToken = httpServletRequest.getHeader("token");
+        if (StringUtils.isBlank(refreshToken) || StringUtils.isBlank(accessToken)) {
+            return NetplixApiResponse.fail(ErrorCode.DEFAULT_ERROR, "토큰이 없습니다.");
+        }
+
+        return NetplixApiResponse.ok(updateTokenUseCase.reissueToken(accessToken, refreshToken));
+    }
+
     @PostMapping("/callback")
     public NetplixApiResponse<TokenResponse> kakaoCallback(@RequestBody Map<String, String> request) {
         String code = request.get("code");
 
         String tokenFromKakao = fetchTokenUseCase.getTokenFromKakao(code);
-        String providerId = fetchUserUseCase.findKakaoProviderId(tokenFromKakao);
-        return NetplixApiResponse.ok(fetchTokenUseCase.findTokenByUserId(providerId));
+        SocialUserResponse kakaoUser = fetchUserUseCase.findKakaoUser(tokenFromKakao);
+
+        SimpleUserResponse simpleUserByProviderId = fetchUserUseCase.findSimpleUserByProviderId(kakaoUser.providerId());
+        if (ObjectUtils.isEmpty(simpleUserByProviderId)) {
+            registerUserUseCase.registerSocialUser(new SocialUserRegistrationCommand(
+                    kakaoUser.name(),
+                    kakaoUser.provider(),
+                    kakaoUser.providerId()
+            ));
+        }
+        return NetplixApiResponse.ok(updateTokenUseCase.upsertToken(kakaoUser.providerId()));
     }
 }

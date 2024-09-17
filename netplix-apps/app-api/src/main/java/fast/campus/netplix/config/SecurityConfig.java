@@ -1,7 +1,6 @@
 package fast.campus.netplix.config;
 
-import fast.campus.netplix.authentication.token.JwtAuthenticationFilter;
-import fast.campus.netplix.oauth.OAuthLoginSuccessHandler;
+import fast.campus.netplix.filter.JwtAuthenticationFilter;
 import fast.campus.netplix.security.NetplixUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +23,6 @@ import java.util.Collections;
 public class SecurityConfig {
 
     private final NetplixUserDetailsService netplixUserDetailsService;
-    private final OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
@@ -42,9 +40,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated());
         httpSecurity.oauth2Login(oauth2 -> oauth2
-                .loginPage("/login")
                 .failureUrl("/login?error=true")
-                .successHandler(oAuthLoginSuccessHandler)
         );
 
         httpSecurity.userDetailsService(netplixUserDetailsService);

@@ -42,7 +42,7 @@ public class MigrateMoviesFromTmdbBatch {
                     MoviePageableResponse fetch;
 
                     do {
-                        fetch = fetchMovieUseCase.fetch(page);
+                        fetch = fetchMovieUseCase.fetchFromClient(page);
                         insertMovieUseCase.insert(fetch.getMovies());
                         page++;
                     } while (fetch.getHasNext());

@@ -69,8 +69,7 @@ docker ps -a
 # P5. OAuth 2.0 연동 (60)
 
 ## S5-1. 카카오 연동 (20)
-## S5-2. 깃허브 연동 (20)
-## S5-3. Access Token 과 Refresh Token (20)
+## S5-2. Access Token 과 Refresh Token (20)
 
 # P6. 구독권 구현하기 (40)
 
