@@ -24,6 +24,7 @@ function Login({ setIsLoggedIn }) {
                 // 응답이 성공하면 로그인 처리 (토큰 저장 등)
                 // 예: localStorage에 토큰 저장
                 localStorage.setItem('token', response.data.data.accessToken);
+                localStorage.setItem('refresh_token', response.data.data.refreshToken);
                 // 이후 페이지 이동 또는 로그인 처리 로직 추가
                 setIsLoggedIn(true)
                 // 예: 대시보드로 이동

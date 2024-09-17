@@ -5,6 +5,7 @@ import fast.campus.netplix.movie.NetplixMovie;
 import fast.campus.netplix.movie.PersistenceMoviePort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +21,8 @@ public class MovieRepository implements PersistenceMoviePort {
 
     @Override
     @Transactional
-    public List<NetplixMovie> fetchBy(int page) {
-        return null;
+    public List<NetplixMovie> fetchBy(int page, int size) {
+        return movieJpaRepository.search(PageRequest.of(page, size)).stream().map(MovieEntity::toDomain).toList();
     }
 
     @Override

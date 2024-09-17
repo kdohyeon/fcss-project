@@ -6,7 +6,10 @@ import fast.campus.netplix.token.SearchTokenPort;
 import fast.campus.netplix.token.UpdateTokenPort;
 import fast.campus.netplix.user.FetchUserUseCase;
 import fast.campus.netplix.user.response.SimpleUserResponse;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +21,6 @@ import org.springframework.util.ObjectUtils;
 import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -71,37 +73,12 @@ public class TokenService implements FetchTokenUseCase, CreateTokenUseCase, Upda
 
     @Override
     public Boolean validateToken(String accessToken) {
-        try {
-            Jws<Claims> claimsJws = Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(accessToken);
+        Jwts.parser()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(accessToken);
 
-            String userId = (String) claimsJws.getPayload().get("userId");
-
-            Optional<NetplixToken> byUserId = searchTokenPort.findByUserId(userId);
-            if (byUserId.isEmpty()) {
-                throw new RuntimeException("토큰이 없습니다.");
-            }
-
-            LocalDateTime now = LocalDateTime.now();
-
-            NetplixToken netplixToken = byUserId.get();
-            if (now.isAfter(netplixToken.getAccessTokenExpireAt())) {
-                throw new RuntimeException("액세스 토큰이 만료되었습니다.");
-            }
-
-            return true;
-        } catch (SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
-        }
-        return false;
+        return true;
     }
 
     @Override
