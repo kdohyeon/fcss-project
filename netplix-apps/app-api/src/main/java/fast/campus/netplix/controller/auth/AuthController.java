@@ -10,8 +10,8 @@ import fast.campus.netplix.security.NetplixAuthUser;
 import fast.campus.netplix.user.FetchUserUseCase;
 import fast.campus.netplix.user.RegisterUserUseCase;
 import fast.campus.netplix.user.command.SocialUserRegistrationCommand;
-import fast.campus.netplix.user.response.SimpleUserResponse;
 import fast.campus.netplix.user.response.SocialUserResponse;
+import fast.campus.netplix.user.response.UserResponse;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -72,8 +72,8 @@ public class AuthController {
         String tokenFromKakao = fetchTokenUseCase.getTokenFromKakao(code);
         SocialUserResponse kakaoUser = fetchUserUseCase.findKakaoUser(tokenFromKakao);
 
-        SimpleUserResponse simpleUserByProviderId = fetchUserUseCase.findSimpleUserByProviderId(kakaoUser.providerId());
-        if (ObjectUtils.isEmpty(simpleUserByProviderId)) {
+        UserResponse byProviderId = fetchUserUseCase.findByProviderId(kakaoUser.providerId());
+        if (ObjectUtils.isEmpty(byProviderId)) {
             registerUserUseCase.registerSocialUser(new SocialUserRegistrationCommand(
                     kakaoUser.name(),
                     kakaoUser.provider(),

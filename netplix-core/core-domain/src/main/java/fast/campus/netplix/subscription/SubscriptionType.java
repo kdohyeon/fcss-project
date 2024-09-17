@@ -15,4 +15,8 @@ public enum SubscriptionType {
     SubscriptionType(String desc) {
         this.desc = desc;
     }
+
+    public String toRole() {
+        return "ROLE_" + this.name();
+    }
 }

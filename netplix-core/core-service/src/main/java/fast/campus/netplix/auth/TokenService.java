@@ -5,7 +5,7 @@ import fast.campus.netplix.token.InsertTokenPort;
 import fast.campus.netplix.token.SearchTokenPort;
 import fast.campus.netplix.token.UpdateTokenPort;
 import fast.campus.netplix.user.FetchUserUseCase;
-import fast.campus.netplix.user.response.SimpleUserResponse;
+import fast.campus.netplix.user.response.UserResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -59,7 +59,7 @@ public class TokenService implements FetchTokenUseCase, CreateTokenUseCase, Upda
     }
 
     @Override
-    public SimpleUserResponse findUserByAccessToken(String accessToken) {
+    public UserResponse findUserByAccessToken(String accessToken) {
         Claims claims = parseClaims(accessToken);
 
         Object userId = claims.get("userId");
@@ -68,7 +68,7 @@ public class TokenService implements FetchTokenUseCase, CreateTokenUseCase, Upda
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
 
-        return fetchUserUseCase.findSimpleUserByProviderId(userId.toString());
+        return fetchUserUseCase.findByProviderId(userId.toString());
     }
 
     @Override

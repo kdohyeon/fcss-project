@@ -55,7 +55,7 @@ docker ps -a
 ## S3-3. JpaAudit 설정 (15)
 ## S3-4. Redis 연동하기 (15)
 
-# P4. 로그인, 로그아웃, 회원가입 만들기 w/ Thymeleaf (90)
+# P4. 로그인, 로그아웃, 회원가입 만들기 w/ React (90)
 
 ## S4-1. Spring Security 초기 설정 (10)
 ## S4-2. Global Exception Advice 설정 (10)

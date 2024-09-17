@@ -4,10 +4,7 @@ import fast.campus.netplix.auth.NetplixUser;
 import fast.campus.netplix.exception.UserException;
 import fast.campus.netplix.user.command.SocialUserRegistrationCommand;
 import fast.campus.netplix.user.command.UserRegistrationCommand;
-import fast.campus.netplix.user.response.DetailUserResponse;
-import fast.campus.netplix.user.response.SimpleUserResponse;
-import fast.campus.netplix.user.response.SocialUserResponse;
-import fast.campus.netplix.user.response.UserRegistrationResponse;
+import fast.campus.netplix.user.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -80,11 +77,10 @@ public class UserService implements RegisterUserUseCase, FetchUserUseCase {
     }
 
     @Override
-    public SimpleUserResponse findSimpleUserByProviderId(String providerId) {
-        Optional<NetplixUser> byProviderId = searchUserPort.findByProviderId(providerId);
-        return byProviderId.map(netplixUser -> new SimpleUserResponse(netplixUser.getUsername(), null, null))
+    public UserResponse findByProviderId(String providerId) {
+        return searchUserPort.findByProviderId(providerId)
+                .map(UserResponse::toUserResponse)
                 .orElse(null);
-
     }
 
     @Override

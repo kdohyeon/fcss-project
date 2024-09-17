@@ -8,9 +8,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -40,9 +38,19 @@ public class UserSubscriptionEntity extends MutableBaseEntity {
     @Column(name = "VALID_YN")
     private Boolean validYn;
 
-    public static UserSubscriptionEntity fromDomain(UserSubscription userSubscription) {
+    public UserSubscription toDomain() {
+        return UserSubscription.builder()
+                .userId(this.userId)
+                .subscriptionType(this.subscriptionName)
+                .startAt(this.subscriptionStartAt)
+                .endAt(this.subscriptionEndAt)
+                .validYn(this.validYn)
+                .build();
+    }
+
+    public static UserSubscriptionEntity toEntity(UserSubscription userSubscription) {
         return new UserSubscriptionEntity(
-                userSubscription.getUserSubscriptionId(),
+                UUID.randomUUID().toString(),
                 userSubscription.getUserId(),
                 userSubscription.getSubscriptionType(),
                 userSubscription.getStartAt(),

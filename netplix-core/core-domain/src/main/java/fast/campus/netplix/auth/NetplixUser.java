@@ -3,8 +3,6 @@ package fast.campus.netplix.auth;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 @Builder
 public class NetplixUser {
@@ -15,9 +13,9 @@ public class NetplixUser {
     private final String phone;
     private final String provider;
     private final String providerId;
-    private final List<NetplixRole> roles;
+    private final String role;
 
-    public NetplixUser(String userId, String username, String encryptedPassword, String email, String phone, String provider, String providerId, List<NetplixRole> roles) {
+    public NetplixUser(String userId, String username, String encryptedPassword, String email, String phone, String provider, String providerId, String role) {
         this.userId = userId;
         this.username = username;
         this.encryptedPassword = encryptedPassword;
@@ -25,6 +23,6 @@ public class NetplixUser {
         this.phone = phone;
         this.provider = provider;
         this.providerId = providerId;
-        this.roles = roles;
+        this.role = role;
     }
 }

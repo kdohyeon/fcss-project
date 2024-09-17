@@ -1,14 +1,13 @@
 package fast.campus.netplix.repository.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import fast.campus.netplix.entity.user.QSocialUserEntity;
 import fast.campus.netplix.entity.user.SocialUserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-import static fast.campus.netplix.entity.user.QSocialUserEntity.*;
+import static fast.campus.netplix.entity.user.QSocialUserEntity.socialUserEntity;
 
 @Repository
 @RequiredArgsConstructor

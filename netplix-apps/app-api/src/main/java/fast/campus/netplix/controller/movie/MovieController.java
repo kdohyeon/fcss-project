@@ -4,6 +4,7 @@ import fast.campus.netplix.controller.NetplixApiResponse;
 import fast.campus.netplix.movie.FetchMovieUseCase;
 import fast.campus.netplix.movie.response.MoviePageableResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ public class MovieController {
     private final FetchMovieUseCase fetchMovieUseCase;
 
     @PostMapping("/search")
+    @PreAuthorize("hasAnyRole('ROLE_FREE', 'ROLE_BRONZE', 'ROLE_SILVER', 'ROLE_GOLD')")
     public NetplixApiResponse<MoviePageableResponse> search(@RequestParam int page) {
         MoviePageableResponse fetch = fetchMovieUseCase.fetchFromDb(page);
         return NetplixApiResponse.ok(fetch);

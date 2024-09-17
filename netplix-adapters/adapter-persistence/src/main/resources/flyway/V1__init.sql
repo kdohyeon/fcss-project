@@ -104,3 +104,19 @@ CREATE TABLE `netplix`.`movies`
 
     PRIMARY KEY (MOVIE_ID)
 );
+
+DROP TABLE IF EXISTS `netplix`.`user_movie_likes`;
+CREATE TABLE `netplix`.`user_movie_likes`
+(
+    USER_MOVIE_LIKE_ID VARCHAR(255) NOT NULL COMMENT 'PK',
+    USER_ID            VARCHAR(255) NOT NULL COMMENT '사용자 ID',
+    MOVIE_ID           VARCHAR(255) NOT NULL COMMENT '영화 ID',
+    LIKE_YN            TINYINT(1) COMMENT '좋아요 여부',
+
+    CREATED_AT         DATETIME     NOT NULL COMMENT '생성일자',
+    CREATED_BY         VARCHAR(50)  NOT NULL COMMENT '생성자',
+    MODIFIED_AT        DATETIME     NOT NULL COMMENT '수정일자',
+    MODIFIED_BY        VARCHAR(50)  NOT NULL COMMENT '수정자',
+
+    PRIMARY KEY (USER_MOVIE_LIKE_ID)
+);

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import axios from "axios";
 
 function Dashboard() {
-    const [page, setPage] = useState('1');
+    const [page, setPage] = useState('0');
     const [movies, setMovies] = useState([]);
 
     const getMovies = async (e) => {
@@ -26,6 +26,30 @@ function Dashboard() {
         setPage(e.target.value)
     };
 
+    const like = (movieName) => {
+        const response = axios.post(`http://localhost:8080/api/v1/movie/${movieName}/like`, {}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+        }).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+    const unlike = (movieName) => {
+        const response = axios.post(`http://localhost:8080/api/v1/movie/${movieName}/unlike`, {}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+        }).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
     return (
         <div className="card shadow-sm p-4" style={{width: '100%'}}>
             <h3 className="text-center mb-4">대시보드</h3>
@@ -44,9 +68,11 @@ function Dashboard() {
                 <table className="table table-bordered table-hover">
                     <thead className="thead-dark">
                     <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Body</th>
+                        <th>영화 이름</th>
+                        <th>장르</th>
+                        <th>설명</th>
+                        <th>좋아요</th>
+                        <th>싫어요</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -55,6 +81,8 @@ function Dashboard() {
                             <td>{item.movieName}</td>
                             <td>{item.genre}</td>
                             <td>{item.overview}</td>
+                            <td><button onClick={() => like(item.movieName)}>좋아요</button></td>
+                            <td><button onClick={() => unlike(item.movieName)}>싫어요</button></td>
                         </tr>
                     ))}
                     </tbody>
