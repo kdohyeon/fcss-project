@@ -1,5 +1,7 @@
 package fast.campus.netplix.sample;
 
+import fast.campus.netplix.movie.NetplixPageableMovies;
+
 public interface SamplePort {
-    String sample();
+    NetplixPageableMovies sample();
 }

@@ -1,6 +1,5 @@
 package fast.campus.netplix.tmdb;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 
 import java.util.List;

@@ -10,7 +10,7 @@ public class SampleService implements SampleUseCase {
     private final SamplePort samplePort;
 
     @Override
-    public String sample() {
-        return samplePort.sample();
+    public void sample() {
+        samplePort.sample();
     }
 }

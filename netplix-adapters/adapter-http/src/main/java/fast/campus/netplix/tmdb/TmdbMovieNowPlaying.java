@@ -1,6 +1,7 @@
 package fast.campus.netplix.tmdb;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fast.campus.netplix.movie.NetplixMovie;
 import lombok.Getter;
 
 import java.util.List;
@@ -42,4 +43,14 @@ public class TmdbMovieNowPlaying {
 
     @JsonProperty("vote_count")
     private String voteCount;
+
+    public NetplixMovie toDomain() {
+        return NetplixMovie.builder()
+                .movieName(title)
+                .isAdult(adult)
+                .genre(TmdbMovieGenre.getGenreNamesByIds(genreIds))
+                .overview(overview)
+                .releasedAt(releaseDate)
+                .build();
+    }
 }

@@ -1,5 +1,6 @@
 package fast.campus.netplix.entity.subscription;
 
+import fast.campus.netplix.entity.audit.MutableBaseEntity;
 import fast.campus.netplix.subscription.SubscriptionType;
 import fast.campus.netplix.subscription.UserSubscription;
 import jakarta.persistence.*;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Table(name = "user_subscriptions")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class UserSubscriptionEntity {
+public class UserSubscriptionEntity extends MutableBaseEntity {
     @Id
     @Column(name = "USER_SUBSCRIPTION_ID")
     private String userSubscriptionId;

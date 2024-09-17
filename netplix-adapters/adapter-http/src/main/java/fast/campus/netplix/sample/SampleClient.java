@@ -1,5 +1,6 @@
 package fast.campus.netplix.sample;
 
+import fast.campus.netplix.movie.NetplixPageableMovies;
 import fast.campus.netplix.tmdb.TmdbMovieListHttpClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -9,8 +10,9 @@ import org.springframework.stereotype.Repository;
 public class SampleClient implements SamplePort {
 
     private final TmdbMovieListHttpClient tmdbMovieListHttpClient;
+
     @Override
-    public String sample() {
-        return tmdbMovieListHttpClient.getMovieListNowPlaying(2);
+    public NetplixPageableMovies sample() {
+        return tmdbMovieListHttpClient.fetchPageable(2);
     }
 }

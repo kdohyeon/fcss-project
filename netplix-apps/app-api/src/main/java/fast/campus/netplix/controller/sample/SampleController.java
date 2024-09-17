@@ -15,7 +15,8 @@ public class SampleController {
     private final SampleUseCase sampleUseCase;
 
     @GetMapping("/test")
-    public NetplixApiResponse<String> sample() {
-        return NetplixApiResponse.ok(sampleUseCase.sample());
+    public NetplixApiResponse<Void> sample() {
+        sampleUseCase.sample();
+        return NetplixApiResponse.ok(null);
     }
 }
