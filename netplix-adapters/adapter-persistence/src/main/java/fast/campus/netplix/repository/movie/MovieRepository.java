@@ -26,6 +26,13 @@ public class MovieRepository implements PersistenceMoviePort {
     }
 
     @Override
+    public NetplixMovie findBy(String movieName) {
+        return movieJpaRepository.findByMovieName(movieName)
+                .map(MovieEntity::toDomain)
+                .orElseThrow();
+    }
+
+    @Override
     @Transactional
     public String insert(NetplixMovie netplixMovie) {
         MovieEntity entity = MovieEntity.toEntity(netplixMovie);

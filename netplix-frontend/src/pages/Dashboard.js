@@ -50,6 +50,18 @@ function Dashboard() {
         })
     }
 
+    const download = (movieName) => {
+        axios.post(`http://localhost:8080/api/v1/movie/${movieName}/download`, {}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+        }).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
     return (
         <div className="card shadow-sm p-4" style={{width: '100%'}}>
             <h3 className="text-center mb-4">대시보드</h3>
@@ -73,6 +85,7 @@ function Dashboard() {
                         <th>설명</th>
                         <th>좋아요</th>
                         <th>싫어요</th>
+                        <th>다운로드</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -83,6 +96,7 @@ function Dashboard() {
                             <td>{item.overview}</td>
                             <td><button onClick={() => like(item.movieName)}>좋아요</button></td>
                             <td><button onClick={() => unlike(item.movieName)}>싫어요</button></td>
+                            <td><button onClick={() => download(item.movieName)}>download</button></td>
                         </tr>
                     ))}
                     </tbody>

@@ -32,4 +32,9 @@ public class JwtTokenProvider {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (String) authentication.getCredentials();
     }
+
+    public String getRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (String) authentication.getAuthorities().stream().findFirst().orElseThrow(RuntimeException::new).getAuthority();
+    }
 }
