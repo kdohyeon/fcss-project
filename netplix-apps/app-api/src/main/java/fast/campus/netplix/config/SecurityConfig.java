@@ -1,6 +1,7 @@
 package fast.campus.netplix.config;
 
 import fast.campus.netplix.filter.JwtAuthenticationFilter;
+import fast.campus.netplix.filter.UserHistoryLoggingFilter;
 import fast.campus.netplix.security.NetplixUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,9 @@ import java.util.Collections;
 public class SecurityConfig {
 
     private final NetplixUserDetailsService netplixUserDetailsService;
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UserHistoryLoggingFilter userHistoryLoggingFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -48,6 +51,7 @@ public class SecurityConfig {
         httpSecurity.userDetailsService(netplixUserDetailsService);
 
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterAfter(userHistoryLoggingFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

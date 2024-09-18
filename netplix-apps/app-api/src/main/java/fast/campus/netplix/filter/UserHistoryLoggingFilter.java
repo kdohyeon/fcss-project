@@ -4,41 +4,39 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fast.campus.netplix.logging.CreateAuditLog;
 import fast.campus.netplix.logging.LogUserAuditHistoryUseCase;
-import jakarta.servlet.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.annotation.Order;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-@Order(100)
 @Component
 @RequiredArgsConstructor
-public class UserHistoryLoggingFilter implements Filter {
+public class UserHistoryLoggingFilter extends OncePerRequestFilter {
 
     private final LogUserAuditHistoryUseCase logUserAuditHistoryUseCase;
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        log(authentication, httpServletRequest);
+        CompletableFuture.runAsync(() -> log(authentication, request));
 
-        filterChain.doFilter(servletRequest, servletResponse);
+        filterChain.doFilter(request, response);
     }
 
-    @Async
     public void log(Authentication authentication, HttpServletRequest httpServletRequest) {
         logUserAuditHistoryUseCase.log(
                 new CreateAuditLog(
@@ -48,7 +46,7 @@ public class UserHistoryLoggingFilter implements Filter {
                         httpServletRequest.getMethod(),
                         httpServletRequest.getRequestURI(),
                         getHeaders(httpServletRequest),
-                        ""
+                        "payload"
                 )
         );
     }
