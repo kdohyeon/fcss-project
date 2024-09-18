@@ -1,4 +1,4 @@
-package fast.campus.netplix.subscription;
+package fast.campus.netplix.movie;
 
 public interface LikeMovieUseCase {
     Boolean like(String userId, String movieId);

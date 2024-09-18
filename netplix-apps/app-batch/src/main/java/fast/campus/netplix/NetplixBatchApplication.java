@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 public class NetplixBatchApplication {
     public static void main(String[] args) {
-        ConfigurableApplicationContext run = SpringApplication.run(NetplixBatchApplication.class);
+        ConfigurableApplicationContext run = SpringApplication.run(NetplixBatchApplication.class, args);
         SpringApplication.exit(run);
     }
 }

@@ -1,6 +1,5 @@
 package fast.campus.netplix.movie;
 
-import fast.campus.netplix.subscription.LikeMovieUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

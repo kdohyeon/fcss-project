@@ -1,6 +1,9 @@
 server:
   port: 8081
 spring:
+  batch:
+    job:
+      name: ${job.name:NONE}
   datasource:
     hikari:
       jdbc-url: jdbc:mysql://localhost:3306/netplix
@@ -41,9 +44,6 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
-  batch:
-    job:
-      name: MigrateMoviesFromTmdbBatch
 
 jwt:
   secret: 7e0b9479f72ce9dd31b6c8c661bb047b2dcfc324d81b78de870959a38826f712

@@ -2,11 +2,9 @@ package fast.campus.netplix.controller.movie;
 
 import fast.campus.netplix.authentication.token.JwtTokenProvider;
 import fast.campus.netplix.controller.NetplixApiResponse;
-import fast.campus.netplix.subscription.LikeMovieUseCase;
+import fast.campus.netplix.movie.LikeMovieUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

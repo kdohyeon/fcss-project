@@ -39,6 +39,26 @@ public class UserSubscription {
         this.validYn = true;
     }
 
+    public void renew() {
+        this.startAt = LocalDateTime.now();
+        this.endAt = getEndAt(this.endAt);
+        this.validYn = true;
+    }
+
+    public void change(SubscriptionType type) {
+        this.subscriptionType = type;
+    }
+
+    public boolean ableToRenew() {
+        LocalDateTime now = LocalDateTime.now();
+        return now.isAfter(endAt);
+    }
+
+    public boolean ableToChange() {
+        LocalDateTime now = LocalDateTime.now();
+        return now.isBefore(endAt) && now.isAfter(startAt) && validYn;
+    }
+
     public static UserSubscription newSubscription(String userId) {
         LocalDateTime now = LocalDateTime.now();
         return new UserSubscription(
