@@ -13,7 +13,6 @@ spring:
       ddl-auto: validate
     generate-ddl: false
     open-in-view: false
-    database: mysql
     show-sql: true
   flyway:
     locations: classpath:flyway

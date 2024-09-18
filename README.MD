@@ -1,12 +1,69 @@
-### 기술 스택
+# Netflix 구독형 멤버십 프로젝트로 배우는 Spring Security
+
+## 개요
+
+- 이 프로젝트는 구독형 멤버십 서비스를 구현하기 위해 Spring Boot 기반의 애플리케이션을 만듭니다.
+- 보안에 초점을 맞추어 Spring Security 를 활용하고, 인증과 인가 기능을 구현합니다. 
+- 기본적인 로그인/로그아웃 기능과 더불어 소셜 로그인을 포함합니다.
+
+## 주요 기술 스택
 
 - SpringBoot 3.3.3
 - Java 17
-- Kotlin 2.0.20
+- SpringSecurity 6.x
+- SpringBatch 5.x
+- JWT (JSON Web Token)
+- OAuth 2.0 (카카오 소셜 로그인)
+- Gradle 빌드
+- MySQL
+- Flyway
+- Docker
+- React 18
+- Node 20.9.0
 
-### 로컬 환경 설정
+## 프로젝트 설정
 
-- docker-compose 파일 실행
+### 사전 준비
+
+1. Java 17 또는 그 이상의 버전을 설치합니다.
+2. Node 20.9.0 버전을 설치합니다.
+3. 로컬 개발 환경에서는 Docker 를 활용하여 MySQL, Redis 를 설치합니다.
+
+#### 노드 설치
+
+nvm 을 활용하여 노드를 설치할 수 있습니다.
+
+1. NVM 설치 확인
+
+먼저, nvm 이 설치되어 있는지 확인합니다. 터미널에 아래 명령어를 입력하여 nvm 버전을 확인합니다.
+
+```bash
+nvm --version
+```
+
+nvm 이 설치되어 있지 않다면, nvm 공식 GitHub 페이지에서 설치 방법을 참고하세요.
+
+2. Node.js 20.9.0 버전 설치
+
+nvm 이 설치되었다면, 아래 명령어를 입력하여 Node.js 20.9.0 버전을 설치합니다.
+
+```bash
+nvm install 20.9.0
+```
+
+이 명령어는 Node.js 20.9.0 버전을 다운로드하고 설치합니다. 설치 후 자동으로 해당 버전이 활성화됩니다.
+
+3. 설치된 Node.js 버전 확인
+
+설치된 Node.js 버전을 확인하려면 다음 명령어를 사용하세요.
+
+```bash
+node -v
+```
+
+v20.9.0 이 출력되면 설치가 정상적으로 완료된 것입니다.
+
+#### Docker-compose 를 활용하여 MySQL, Redis 실행
 
 ```shell
 docker-compose -f ./infra/docker-compose.yml up -d
@@ -14,92 +71,186 @@ docker-compose -f ./infra/docker-compose.yml up -d
 docker ps -a
 ```
 
-### 프로젝트 셋팅
+### 프로젝트 실행
 
-- 멀티 모듈 프로젝트로 셋팅
-- 헥사고날 아키텍쳐를 추구함
-    - 따라서 netplix-apps 아래에 api 와 batch 애플리케이션을 모아둠
-    - netplix-core 내부에는 헥사고날 내부의 코어 로직을 두고자 함
-    - netplix-adapters 에는 외부 인프라와 통신이 필요한 코드를 위치시킴
+#### 백엔드 애플리케이션 실행
 
-#### TMDB - The Movie Database
+`NetplixApiApplication` 을 실행합니다.
 
-- 아래 링크를 따라서 API Key 를 받음
+http://localhost:8080 으로 접근할 수 있습니다.
+
+#### 프론트엔드 애플리케이션 실행
+
+`netplix-frontend` 디렉토리로 접근하여 애플리케이션을 실행합니다.
+
+```shell
+cd ./netplix-frontend
+
+npm run start
+```
+
+`http://localhost:3000` 으로 접근합니다.
+
+## 프로젝트 모듈 구조
+
+헥사고날 아키텍쳐로 구성하기 위해 프로젝트를 멀티 모듈로 구성합니다.
+
+주요 모듈:
+
+- `netplix-core`: 비즈니스 로직과 도메인 모델을 관리하는 기본 모듈
+- `netplix-apps`: 클라이언트가 호출할 수 있는 REST API 와 배치잡을 모아둔 모듈
+- `netplix-adapters`: HTTP Client, DB, Redis 등 외부 인프라와 통신하기 위한 모듈
+- `netplix-commons`: 공통으로 사용되는 유틸리티를 모아둔 모듈
+- `netplix-frontend`: React 기반의 프론트엔드 코드를 모아둔 모듈
+
+```text
+root
+│
+├── netplix-adapters/
+│   ├── adapter-http # 외부와의 통신을 담당하는 모듈
+│   ├── adapter-persistence # DB 와의 통신을 담당하는 모듈
+│   └── adapter-redis # 레디스와의 통신을 담당하는 모듈
+│
+├── netplix-apps/
+│   ├── app-api # REST API 를 모아둔 모듈
+│   └── app-batch # 배치잡을 모아둔 모듈
+│
+├── netplix-commons/ # 공통 모듈
+│
+├── netplix-core/
+│   ├── core-domain/ # 도메인 모델을 담당하는 모듈
+│   ├── core-port/ # 외부와의 통신을 위한 인터페이스를 모아둔 모듈
+│   ├── core-service/ # 비즈니스 로직을 구현하는 모듈
+│   └── core-usecase/ # 클라이언트에서 호출할 수 있는 인터페이스를 모아둔 모듈
+│
+└── netplix-frontend/ # react.js 기반 프론트엔드 모듈
+```
+
+## 영화 데이터 (TMDB - The Movie Database)
+
+영화 데이터를 가져오기 위해 TMDB 라는 곳을 활용합니다.
+
+- 아래 링크로 접근하여 API Key 를 받습니다.
     - https://developer.themoviedb.org/reference/intro/getting-started
-- 회원가입을 하고 사이트에서 애플리케이션 등록을 해야 함
-    - 이 때, 설명을 좀 길게 적어야 함 (안그러면 에러 남)
+- 회원가입을 하고 사이트에서 애플리케이션 등록을 합니다.
+    - TIP. 설명을 좀 길게 적어야 에러가 발생하지 않습니다.
 
-## 프로젝트
+## ERD (Entity-Relation Diagram)
 
-프로젝트 명: Netplix 구독 서비스
+```mermaid
+erDiagram
+    USERS {
+        VARCHAR USER_ID PK "사용자 ID (UUID)"
+        VARCHAR USER_NAME "사용자 이름"
+        VARCHAR PASSWORD "사용자 비밀번호 (암호화)"
+        VARCHAR EMAIL "이메일"
+        VARCHAR PHONE "전화번호"
+        DATETIME CREATED_AT "생성일자"
+        VARCHAR CREATED_BY "생성자"
+        DATETIME MODIFIED_AT "수정일자"
+        VARCHAR MODIFIED_BY "수정자"
+    }
 
-# P1. 프로젝트 설명 (60)
+    SOCIAL_USERS {
+        VARCHAR SOCIAL_USER_ID PK "소셜 사용자 ID (UUID)"
+        VARCHAR USER_NAME "소셜 사용자 이름"
+        VARCHAR PROVIDER "소셜 프로바이더 (구글, 카카오 등)"
+        VARCHAR PROVIDER_ID "프로바이더 ID"
+        DATETIME CREATED_AT "생성일자"
+        VARCHAR CREATED_BY "생성자"
+        DATETIME MODIFIED_AT "수정일자"
+        VARCHAR MODIFIED_BY "수정자"
+    }
 
-## S1-1. 요구사항 및 필요 기능 파악하기 (15)
-- 기술 스택, 아키텍쳐 설명
-## S1-2. 오픈소스 설명 - TMDB (10)
-## S1-3. ERD (10)
-## S1-4. 헥사고날 아키텍쳐에 대한 설명 - 1 (15)
-## S1-5. 헥사고날 아키텍쳐에 대한 설명 - 2 (10)
+    USER_HISTORIES {
+        BIGINT USER_HISTORY_ID PK "사용자 이력 ID"
+        VARCHAR USER_ID FK "사용자 ID"
+        VARCHAR USER_ROLE "사용자 역할"
+        VARCHAR REQ_IP "요청 IP"
+        VARCHAR REQ_METHOD "요청 메소드"
+        VARCHAR REQ_URL "요청 URL"
+        TEXT REQ_HEADER "요청 헤더"
+        TEXT REQ_PAYLOAD "요청 바디"
+        DATETIME CREATED_AT "생성일자"
+        VARCHAR CREATED_BY "생성자"
+        DATETIME MODIFIED_AT "수정일자"
+        VARCHAR MODIFIED_BY "수정자"
+    }
 
-# P2. 로컬 환경 셋팅 (45)
+    USER_SUBSCRIPTIONS {
+        VARCHAR USER_SUBSCRIPTION_ID PK "사용자 구독 ID"
+        VARCHAR USER_ID FK "사용자 ID"
+        VARCHAR SUBSCRIPTION_NAME "구독권 이름"
+        DATETIME START_AT "시작 일시"
+        DATETIME END_AT "종료 일시"
+        TINYINT VALID_YN "구독권 유효 여부"
+        DATETIME CREATED_AT "생성일자"
+        VARCHAR CREATED_BY "생성자"
+        DATETIME MODIFIED_AT "수정일자"
+        VARCHAR MODIFIED_BY "수정자"
+    }
 
-## S2-1. 멀티 모듈과 헥사고날 아키텍쳐 기반으로 스프링부트 프로젝트 초기 설정하기 (15)
-## S2-2. `buildSrc` 와 `gradle` 의존성 처리하기 (15)
-## S2-3. MySQL 과 Redis 의 도커 설정 (15)
+    TOKENS {
+        VARCHAR TOKEN_ID PK "토큰 ID"
+        VARCHAR USER_ID FK "사용자 ID"
+        VARCHAR ACCESS_TOKEN "액세스 토큰"
+        VARCHAR REFRESH_TOKEN "리프레시 토큰"
+        DATETIME ACCESS_TOKEN_EXPIRES_AT "액세스 토큰 만료시간"
+        DATETIME REFRESH_TOKEN_EXPIRES_AT "리프레시 토큰 만료시간"
+        DATETIME CREATED_AT "생성일자"
+        VARCHAR CREATED_BY "생성자"
+        DATETIME MODIFIED_AT "수정일자"
+        VARCHAR MODIFIED_BY "수정자"
+    }
 
-# P3. 외부 인프라 연동 셋팅 (60)
+    MOVIES {
+        VARCHAR MOVIE_ID PK "영화 ID"
+        VARCHAR MOVIE_NAME "영화 명"
+        TINYINT IS_ADULT "성인 영화 여부"
+        VARCHAR GENRE "장르"
+        VARCHAR OVERVIEW "설명"
+        VARCHAR RELEASED_AT "출시일자"
+        DATETIME CREATED_AT "생성일자"
+        VARCHAR CREATED_BY "생성자"
+        DATETIME MODIFIED_AT "수정일자"
+        VARCHAR MODIFIED_BY "수정자"
+    }
 
-## S3-1. TMBD 연동하기 (15)
-## S3-2. MySQL 연동하기 (15)
-## S3-3. JpaAudit 설정 (15)
-## S3-4. Redis 연동하기 (15)
+    USER_MOVIE_LIKES {
+        VARCHAR USER_MOVIE_LIKE_ID PK "PK"
+        VARCHAR USER_ID FK "사용자 ID"
+        VARCHAR MOVIE_ID FK "영화 ID"
+        TINYINT LIKE_YN "좋아요 여부"
+        DATETIME CREATED_AT "생성일자"
+        VARCHAR CREATED_BY "생성자"
+        DATETIME MODIFIED_AT "수정일자"
+        VARCHAR MODIFIED_BY "수정자"
+    }
 
-# P4. 로그인, 로그아웃, 회원가입 만들기 w/ React (90)
+  USER_MOVIE_DOWNLOADS {
+    VARCHAR USER_MOVIE_DOWNLOAD_ID PK "PK"
+    VARCHAR USER_ID FK "사용자 ID"
+    VARCHAR MOVIE_ID FK "영화 ID"
+    DATETIME CREATED_AT "생성일자"
+    VARCHAR CREATED_BY "생성자"
+    DATETIME MODIFIED_AT "수정일자"
+    VARCHAR MODIFIED_BY "수정자"
+  }
 
-## S4-1. Spring Security 초기 설정 (10)
-## S4-2. Global Exception Advice 설정 (10)
-## S4-3. 타임리프 레이아웃 잡기 (10)
-## S4-4. 회원가입 - API (10)
-## S4-5. 회원가입 - 폼 (10)
-## S4-6. @EncryptedPassword 어노테이션 만들기 (10)
-## S4-7. 로그인 - API (15)
-## S4-8. 로그인, 로그아웃 - 폼 (15)
+  USERS ||--o{ USER_HISTORIES : "Has"
+  USERS ||--o{ USER_SUBSCRIPTIONS : "Has"
+  USERS ||--o{ TOKENS : "Has"
+  USERS ||--o{ USER_MOVIE_LIKES : "Likes"
+  USERS ||--o{ USER_MOVIE_DOWNLOADS : "Downloads"
+  MOVIES ||--o{ USER_MOVIE_LIKES : "Liked by"
+  MOVIES ||--o{ USER_MOVIE_DOWNLOADS : "Downloaded by"
+```
 
-# P5. OAuth 2.0 연동 (60)
-
-## S5-1. 카카오 연동 (20)
-## S5-2. Access Token 과 Refresh Token (20)
-
-# P6. 구독권 구현하기 (40)
-
-## S6-1. 구독권 별 기능 설명 (feat. FREE, BRONZE, SILVER, GOLD) (10)
-## S6-2. 구독권 Entity 및 Repository 생성 (15)
-## S6-3. 구독권 별 권한 부여 (15)
-
-# P7. TMDB 에서 영화 데이터 조회 후 MySQL 데이터베이스에 저장하기 (w/ Spring Batch) (75)
-
-## P7-1. Spring Batch 설명 (15)
-## P7-2. Spring Batch 설정 (15)
-## P7-3. 영화 데이터 조회 API 생성 (15)
-## P7-4. 영화 관련 Entity 및 Repository 생성 (15)
-## P7-5. 영화 데이터 저장 배치 생성 (15)
-
-# P8. 핵심 비즈니스 로직 구현하기 (105)
-
-## S8-1. 영화 목록 조회 API 생성 (15)
-## S8-2. 영화 상세 조회 API 생성 (15)
-## S8-3. 영화 "좋아요" API 생성  (15)
-## S8-4. 영화 다운로드 API 생성 (15)
-## S8-5. 영화 플레이 API 생성. 광고 시간/마지막 본 타임라인/화질 (15)
-## S8-6. 구독권 구독/해지/조회/변경 API (30)
-
-
-# Rules
+## Rules
 
 다음의 룰을 따릅니다.
 
-## 💬 Commit Convention
+### 💬 Commit Convention
 
 | 작업 태그      | 설명                                                     |
 |------------|--------------------------------------------------------|

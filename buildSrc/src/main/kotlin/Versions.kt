@@ -7,8 +7,6 @@ object Versions {
     const val asciidoctorPlugin = "3.3.2"
     const val lineRecipePlugin = "1.1.1"
 
-    const val kotlin = "2.0.20"
-
     const val jwt = "0.12.6"
 
     const val apacheCommonsLang = "3.12.0"

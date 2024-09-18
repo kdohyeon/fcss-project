@@ -9,11 +9,6 @@ plugins {
     id("com.epages.restdocs-api-spec") version Versions.restdocsApiSpec apply false
     id("org.asciidoctor.jvm.convert") version Versions.asciidoctorPlugin apply false
     id("com.linecorp.build-recipe-plugin") version Versions.lineRecipePlugin
-
-    kotlin("jvm") version Versions.kotlin apply false
-    kotlin("kapt") version Versions.kotlin apply false
-    kotlin("plugin.spring") version Versions.kotlin apply false
-    kotlin("plugin.jpa") version Versions.kotlin apply false
 }
 
 allprojects {
@@ -54,7 +49,6 @@ configureByLabels("java") {
     the<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension>().apply {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:${Versions.springBoot}")
-            mavenBom("org.jetbrains.kotlin:kotlin-bom:${Versions.kotlin}")
             mavenBom("com.google.guava:guava-bom:${Versions.guava}")
         }
 
